@@ -10,60 +10,54 @@ namespace BalancedBrackets
     {
         static void Main(string[] args)
         {
-            string aString = "{{[]}}";
+            string aString = "[{{[]}}]";
             Console.WriteLine(BalancedBrackets(aString));
             Console.ReadLine();
         }
         private static bool BalancedBrackets(string code)
         {
             Stack<char> opens = new Stack<char>();
-            for (int i = 0; i < code.Length; i++){
-                switch (code[i])
+            for (int i = 0; i < code.Length; i++)
+            {
+                char thisOne = code[i];
+                if (thisOne == '(' || thisOne == '[' || thisOne == '{')
                 {
-                    case '(':
-                        opens.Push('(');
-                        break;
-                    case '[':
-                        opens.Push('[');
-                        break;
-                    case '{':
-                        opens.Push('{');
-                        break;
-                    case ')':
-                        if (opens.Count == 0)
+                    opens.Push(thisOne);
+                }
+                if (thisOne == ')' || thisOne == ']' || thisOne == '}')
+                {
+                    if (opens.Count == 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        char testChar = opens.Pop();
+                        switch (thisOne)
                         {
-                            return false;
+                            case ')':
+                                if(testChar != '(')
+                                {
+                                    return false;
+                                }
+                                break;
+                                ;
+                            case ']':
+                                if(testChar != '[')
+                                {
+                                    return false;
+                                }
+                                break;
+                                ;
+                            case '}':
+                                if(testChar != '{')
+                                {
+                                    return false;
+                                }
+                                break;
+                                ;
                         }
-                        char testParen = opens.Pop();
-                        if(testParen != '(')
-                        {
-                            return false;
-                        }
-                        break;
-                    case ']':
-                        if(opens.Count == 0)
-                        {
-                            return false;
-                        }
-                        char testBrack = opens.Pop();
-                        if (testBrack != '[')
-                        {
-                            return false;
-                        }
-                        break;
-                    case '}':
-                        if (opens.Count == 0)
-                        {
-                            return false;
-                        }
-                        char testCurly = opens.Pop();
-                        if(testCurly != '{')
-                        {
-                            return false;
-                        }
-                        break;
-                    default:
-                        break;
+                    }
                 }
             }
             return opens.Count == 0;
