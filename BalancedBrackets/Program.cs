@@ -16,46 +16,48 @@ namespace BalancedBrackets
         }
         private static bool BalancedBrackets(string code)
         {
-            int parens = 0;
-            int bracks = 0;
-            int curlies = 0;
-            Stack<char> found = new Stack<char>();
+            Stack<char> opens = new Stack<char>();
             for (int i = 0; i < code.Length; i++){
-                char thisOne = code[i];
-                switch (thisOne)
+                switch (code[i])
                 {
                     case '(':
-                        parens++;
-                        found.Push('(');
+                        opens.Push('(');
                         break;
                     case '[':
-                        bracks++;
-                        found.Push('[');
+                        opens.Push('[');
                         break;
                     case '{':
-                        curlies++;
-                        found.Push('{');
+                        opens.Push('{');
                         break;
                     case ')':
-                        parens--;
-                        char testParen = found.Pop();
-                        if(parens < 0 || testParen != '(')
+                        if (opens.Count == 0)
+                        {
+                            return false;
+                        }
+                        char testParen = opens.Pop();
+                        if(testParen != '(')
                         {
                             return false;
                         }
                         break;
                     case ']':
-                        bracks--;
-                        char testBrack = found.Pop();
-                        if (bracks < 0 || testBrack != '[')
+                        if(opens.Count == 0)
+                        {
+                            return false;
+                        }
+                        char testBrack = opens.Pop();
+                        if (testBrack != '[')
                         {
                             return false;
                         }
                         break;
                     case '}':
-                        curlies--;
-                        char testCurly = found.Pop();
-                        if(curlies< 0 || testCurly != '{')
+                        if (opens.Count == 0)
+                        {
+                            return false;
+                        }
+                        char testCurly = opens.Pop();
+                        if(testCurly != '{')
                         {
                             return false;
                         }
@@ -64,7 +66,7 @@ namespace BalancedBrackets
                         break;
                 }
             }
-            return found.Count == 0;
+            return opens.Count == 0;
         }
     }
 }
